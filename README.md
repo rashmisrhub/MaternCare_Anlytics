@@ -1,1 +1,2 @@
-# MaternCare_Anlytics
+# MaternCare Anlytics 
+These measures are intended to drive improvements in maternal health. By providing care to pregnant women that follows best practices that advance health care quality, safety, and equity, hospitals and doctors can improve chances for a safe delivery and a healthy baby.These measures are intended to drive improvements in maternal health. By providing care to pregnant women that follows best practices that advance health care quality, safety, and equity, hospitals and doctors can improve chances for a safe delivery and a healthy baby.
