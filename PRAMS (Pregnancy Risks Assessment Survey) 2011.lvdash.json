@@ -1,0 +1,308 @@
+{
+  "datasets": [
+    {
+      "name": "9e422f84",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        "select\n",
+        "  lower(prd.response) like 'yes%' as is_medicaid_coverage_yes,\n",
+        "  count(*) as count\n",
+        "from materncare_anlytics.gold.prams_response_dim prd\n",
+        "join materncare_anlytics.gold.prams_data_fact pdf\n",
+        "  on prd.responseid = pdf.ResponseId\n",
+        "join materncare_anlytics.gold.prams_questions_dim pqd\n",
+        "  on pdf.questionid = pqd.question_id\n",
+        "where pdf.questionid = 'QUO25'\n",
+        "  and (lower(prd.response) like 'yes%' or lower(prd.response) like 'no%')\n",
+        "group by lower(prd.response) like 'yes%'"
+      ]
+    },
+    {
+      "name": "3dfafb22",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        "select distinct\n",
+        "  q.Question_Id,\n",
+        "  q.Question,\n",
+        "  count(*) as response_count\n",
+        "from materncare_anlytics.gold.prams_data_fact f\n",
+        "join materncare_anlytics.gold.prams_questions_dim q\n",
+        "  on f.QuestionId= q.Question_Id\n",
+        "  where f.QuestionId not in('QUO326', 'QUO326')\n",
+        "group by q.Question, q.Question_Id, q.question_no\n",
+        "order by response_count desc\n",
+        "limit 5"
+      ]
+    },
+    {
+      "name": "54c10c3b",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        "/* Total count of surevey responses */\n",
+        "select count(*) from materncare_anlytics.gold.prams_data_fact"
+      ]
+    },
+    {
+      "name": "1a60fc64",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        "/*Sample size refers to the number of women who participate in the PRAMS survey in a particular state or jurisdiction during a given year.*/\n",
+        "select\n",
+        "  LocationAbbr as state,\n",
+        "  max(Sample_Size) as max_sample_size\n",
+        "from materncare_anlytics.gold.prams_data_fact\n",
+        "where LocationAbbr not in ('PRAMS Total')\n",
+        "group by LocationAbbr\n",
+        "order by max_sample_size desc\n"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "eb84fd9d",
+      "displayName": "Medicaid Coverage",
+      "layout": [
+        {
+          "widget": {
+            "name": "85faa8cf",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9e422f84",
+                  "fields": [
+                    {
+                      "name": "sum(count)",
+                      "expression": "SUM(`count`)"
+                    },
+                    {
+                      "name": "is_medicaid_coverage_yes",
+                      "expression": "`is_medicaid_coverage_yes`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "sum(count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Sum of count"
+                },
+                "color": {
+                  "fieldName": "is_medicaid_coverage_yes",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "is_medicaid_coverage_yes"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Mother's Medicaid Coverage Proportion (prenatal care) -2011 survey in USA states",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "6c463315",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3dfafb22",
+                  "fields": [
+                    {
+                      "name": "Question",
+                      "expression": "`Question`"
+                    },
+                    {
+                      "name": "sum(response_count)",
+                      "expression": "SUM(`response_count`)"
+                    },
+                    {
+                      "name": "Question_Id",
+                      "expression": "`Question_Id`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(response_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "response_count"
+                },
+                "y": {
+                  "fieldName": "Question_Id",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Question_Id"
+                },
+                "color": {
+                  "fieldName": "Question",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Question"
+                }
+              },
+              "frame": {
+                "title": "The most responded questions top 5 (Pregnancy Risk Assessment Monitoring Survey)",
+                "showTitle": true
+              },
+              "mark": {
+                "layout": "stack"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "09c15dc9",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "54c10c3b",
+                  "fields": [
+                    {
+                      "name": "count(1)",
+                      "expression": "`count(1)`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "count(1)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    }
+                  },
+                  "rowNumber": 1,
+                  "displayName": "count(1)"
+                }
+              },
+              "frame": {
+                "title": "Pregnancy Risk Assessment 2011 - Number of Responses Recieved ",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "6726d7d4",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1a60fc64",
+                  "fields": [
+                    {
+                      "name": "sum(max_sample_size)",
+                      "expression": "SUM(`max_sample_size`)"
+                    },
+                    {
+                      "name": "state",
+                      "expression": "`state`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(max_sample_size)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "Sample Size"
+                  },
+                  "displayName": "max_sample_size"
+                },
+                "y": {
+                  "fieldName": "state",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "state"
+                }
+              },
+              "frame": {
+                "title": "Number of women who participated in the PRAMS survey in a particular state or jurisdiction during year 2011.",
+                "showTitle": true
+              },
+              "mark": {
+                "layout": "group"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    }
+  }
+}
