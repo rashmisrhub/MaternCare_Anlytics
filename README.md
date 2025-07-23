@@ -10,7 +10,7 @@ This project aims to provide comprehensive analytics on the Pregnancy Risk Asses
 3. **Transformation**: The data is loaded and transformed into Delta Silver tables. In this step, data cleaning and preprocessing occur, which may include handling missing values, correcting data types, and other transformations to prepare the data for analysis.
 4. **Data Modeling**: Post transformation, the Silver tables are restructured into a star schema in Gold Delta tables.
 
-Anlytics Platform and Technologies: Databricks notebooks, PySpark, SQL, Azure, ADF, Delta Live tables, DataLake house, workflows and orchetrations
+Data Platform and Technologies: Databricks notebooks, PySpark, SQL, Azure, ADF, Delta Live tables, DataLake house, workflows and orchetrations
 
 5.  **Reporting and Anlytics**
 <img width="1156" height="689" alt="Screenshot 2025-07-22 at 10 39 04 PM" src="https://github.com/user-attachments/assets/84c6cb56-b286-409f-afc2-7ad07233fc29" />
